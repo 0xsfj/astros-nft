@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, Box, Button, Flex, Image, Link, Heading, Stack, Icon, IconButton, useDisclosure, HStack, Menu, MenuButton, Avatar, useColorModeValue, Tooltip, Container, Grid, useToast } from '@chakra-ui/react';
+import { Text, Box, Button, Flex, Image, Link, Heading, Stack, Icon, IconButton, useDisclosure, HStack, Menu, MenuButton, Avatar, useColorModeValue, Tooltip, Container, SimpleGrid, useToast } from '@chakra-ui/react';
 import { ExternalLinkIcon, HamburgerIcon, CloseIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 import { BiWalletAlt } from 'react-icons/bi';
 import astroNftAbi from '../artifacts/contracts/AstroNFT.sol/AstroNFT.json';
@@ -51,10 +51,10 @@ const AstrosIcon = (props) => (
   </Icon>
 );
 
-const OPENSEA_LINK = '';
+const OPENSEA_LINK = 'https://testnets.opensea.io/collection/astrosnft-et0kbylubp';
 const CONTRACT_ADDRESS = '0xa5209EbD25718DD46bEf1743379c9687D6640f20';
 
-const Links = ['Team', 'OpenSea'];
+const Links = [{ name: 'OpenSea', link: OPENSEA_LINK, external: true }];
 
 const HomePage = () => {
   const [currentAccount, setCurrentAccount] = useState('');
@@ -179,7 +179,7 @@ const HomePage = () => {
     checkIfWalletIsConnected();
   }, []);
 
-  const NavLink = ({ children }) => (
+  const NavLink = ({ name, link, external }) => (
     <Link
       px={2}
       py={1}
@@ -188,9 +188,10 @@ const HomePage = () => {
         textDecoration: 'none',
         bg: useColorModeValue('gray.200', 'gray.700'),
       }}
-      href={'#'}
+      href={link}
+      isExternal={external}
     >
-      {children}
+      {name}
     </Link>
   );
 
@@ -204,8 +205,8 @@ const HomePage = () => {
           <HStack spacing={8} alignItems={'center'}>
             <AstrosIcon />
             <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
-              {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
+              {Links.map((link, key) => (
+                <NavLink key={key} link={link.link} name={link.name} external={link.external} />
               ))}
             </HStack>
           </HStack>
@@ -220,8 +221,8 @@ const HomePage = () => {
         {isOpen ? (
           <Box pb={4} display={{ md: 'none' }}>
             <Stack as={'nav'} spacing={4}>
-              {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
+              {Links.map((link, key) => (
+                <NavLink key={key} link={link.link} name={link.name} external={link.external} />
               ))}
             </Stack>
           </Box>
@@ -234,6 +235,9 @@ const HomePage = () => {
         <Heading as="h1" bgGradient="linear(to-l, #FCF6BA, #BF953F, #FCF6BA)" bgClip="text" fontSize="10vw" letterSpacing="10px" textTransform="uppercase" fontWeight="extrabold" mb="4">
           Astros NFT
         </Heading>
+        <Heading as="h2" mb="4">
+          Only on Rinkeby (For Now)
+        </Heading>
         {currentAccount === '' ? (
           <Button onClick={connectWallet} size="lg">
             Connect Wallet
@@ -245,7 +249,7 @@ const HomePage = () => {
         )}
       </Box>
       <Container maxW="80vw">
-        <Grid templateColumns="repeat(5, 1fr)" gap={6}>
+        <SimpleGrid columns={[2, 3, 4]} spacing={'40px'}>
           <Box w="100%" h="10" bg="blue.500" border="2px solid #FCF6BA" borderRadius="5" overflow="hidden" display="inline-table">
             <Image src="images/Astro.png" alt="Astro" />
           </Box>
@@ -258,10 +262,7 @@ const HomePage = () => {
           <Box w="100%" h="10" bg="blue.500" border="2px solid #FCF6BA" borderRadius="5" overflow="hidden" display="inline-table">
             <Image src="images/Astro.png" alt="Astro" />
           </Box>
-          <Box w="100%" h="10" bg="blue.500" border="2px solid #FCF6BA" borderRadius="5" overflow="hidden" display="inline-table">
-            <Image src="images/Astro.png" alt="Astro" />
-          </Box>
-        </Grid>
+        </SimpleGrid>
       </Container>
       <Box as="footer" role="contentinfo" mx="auto" maxW="7xl" py="12" px={{ base: '4', md: '8' }}>
         <Stack>
